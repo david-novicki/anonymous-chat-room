@@ -5,7 +5,7 @@ const sendMessage = (message) => {
 	socket.emit('sendMessage', message);
 };
 const onReady = (cb) => {
-	socket = openSocket('http://localhost:3000');
+	socket = openSocket('http://104.236.164.210');
 	socket.on('onStart', cb);
 };
 const receiveMessage = (cb) => {
