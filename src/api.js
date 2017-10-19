@@ -5,7 +5,7 @@ const sendMessage = (message) => {
 	socket.emit('sendMessage', message);
 };
 const onReady = (cb) => {
-	socket = openSocket('http://104.236.164.210');
+	socket = openSocket('http://www.anonymous-chatroom.com');
 	socket.on('onStart', cb);
 };
 const receiveMessage = (cb) => {

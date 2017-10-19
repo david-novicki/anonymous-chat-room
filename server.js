@@ -2,6 +2,8 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var https = require('https');
+var fs = require('fs');
 var messages = [];
 
 app.use(express.static('build'))
@@ -30,5 +32,13 @@ io.on('connection', (socket) => {
 });
 
 http.listen(3000, () => {
-	console.log('listening on *:3000');
+	console.log('http listening on *:3000');
 });
+if (process.env.NODE_ENV == 'production') {
+	var https_options = {
+		key: fs.readFileSync('./www.anonymous-chatroom.com.key'),
+		cert: fs.readFileSync('./www.anonymous-chatroom.com.crt')
+	};
+	https.createServer(https_options, app).listen(3001);
+	console.log('https listening on %s:%s', 3001);
+}
