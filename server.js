@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
+var appRedirect = express();
+var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var messages = [];
@@ -9,10 +10,10 @@ app.use(express.static('build'))
 app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/build/index.html');
 });
+appRedirect.get('*', (req, res) => {
+	res.redirect(301, 'https://www.anonymous-chatroom.com');
+});
 
-// http.listen(3000, () => {
-// 	console.log('http listening on *:3000');
-// });
 if (process.env.NODE_ENV == 'production') {
 	var https_options = {
 		key: fs.readFileSync('./www.anonymous-chatroom.com.key'),
@@ -38,7 +39,11 @@ if (process.env.NODE_ENV == 'production') {
 			console.log('user disconnected');
 		});
 	});
+	var redirect = http.createServer(appRedirect);
+	redirect.listen(3000, () => {
+		console.log('http listening on 3000');
+	});
 	server.listen(3001, () => {
-		console.log('https listening on ', 3001);
+		console.log('https listening on 3001');
 	});
 }
